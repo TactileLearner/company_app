@@ -5,7 +5,8 @@ Here's a complete `README.md` file formatted for GitHub, based on the detailed p
 ````markdown
 # My Company App
 
-**My Company App** is a comprehensive web application built with Django, designed to manage various aspects of a company's operations, including employee management, HR functions, project tracking, and client interactions.
+**My Company App** is a comprehensive web application built with Django, designed to manage various aspects of a company's operations,
+including employee management, HR functions, project tracking, and client interactions.
 
 The system features **role-based dashboards**, centralized authentication, and secure access tailored to user roles (Admin, Manager, HR, Employee, Client).
 
