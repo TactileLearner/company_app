@@ -187,31 +187,3 @@ my_company_app/
 * Email/password reset system
 * Notifications and alerts for key events
 * API integrations (optional)
-
----
-
-## 📄 License
-
-\[Specify your license here, e.g., MIT License, Apache 2.0, etc.]
-
----
-
-## 🤝 Contributions
-
-Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
-
----
-
-## ✉️ Contact
-
-For questions or support, feel free to open an issue or contact the project maintainers.
-
-```
-
----
-
-Let me know if you'd like me to:
-- Add badges (build, license, Python version, etc.)
-- Generate a `.gitignore` file for this project
-- Convert this to PDF or another format for documentation
-```
