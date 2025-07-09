@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager - Task List</title>
+</head>
+<body>
+    <h1>{{ message }}</h1>
+    <h2>All Tasks</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.name }} (Project: {{ task.project.name|default:"N/A" }}) - Due: {{ task.due_date }} - Status: {{ task.status }}</li>
+        {% empty %}
+            <li>No tasks found.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'manager_app:dashboard' %}">Back to Dashboard</a></p>
+    <form action="{% url 'common_app:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

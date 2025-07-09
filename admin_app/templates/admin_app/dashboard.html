@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Basic styling for readability - you'll likely replace this with a proper CSS framework */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        .dashboard-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card h2 { margin-top: 0; color: #0056b3; }
+        .card ul { list-style: none; padding: 0; }
+        .card ul li { margin-bottom: 5px; }
+        .quick-links a { display: block; margin-bottom: 10px; padding: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; text-align: center; }
+        .quick-links a:hover { background-color: #0056b3; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px;}
+        .metric-item { background-color: #e9ecef; padding: 15px; border-radius: 5px; text-align: center; }
+        .metric-item strong { display: block; font-size: 2em; color: #28a745; }
+        .metric-item span { font-size: 0.9em; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Admin Dashboard, {{ request.user.username }}!</h1>
+
+    <p><a href="{% url 'common_app:logout' %}">Logout</a></p>
+
+    <div class="dashboard-container">
+
+        <div class="card">
+            <h2>Overview</h2>
+            <div class="metrics-grid">
+                <div class="metric-item"><strong>{{ total_users }}</strong><span>Total Users</span></div>
+                <div class="metric-item"><strong>{{ total_employees }}</strong><span>Total Employees</span></div>
+                <div class="metric-item"><strong>{{ total_clients }}</strong><span>Total Clients</span></div>
+                <div class="metric-item"><strong>{{ total_projects }}</strong><span>Active/Total Projects</span></div>
+                <div class="metric-item"><strong>{{ pending_leave_requests }}</strong><span>Pending Leave Requests</span></div>
+                <div class="metric-item"><strong>{{ overdue_tasks }}</strong><span>Overdue Tasks</span></div>
+            </div>
+        </div>
+
+        <div class="card quick-links">
+            <h2>Quick Actions</h2>
+            <a href="{% url 'admin:common_app_customuser_add' %}">Add New User</a>
+            <a href="{% url 'admin:common_app_customuser_changelist' %}">Manage Users</a>
+            <a href="{% url 'admin:common_app_employee_add' %}">Add New Employee</a>
+            <a href="{% url 'admin:common_app_employee_changelist' %}">Manage Employees</a>
+            <a href="{% url 'admin:common_app_project_add' %}">Add New Project</a>
+            <a href="{% url 'admin:common_app_project_changelist' %}">Manage Projects</a>
+            <a href="{% url 'admin:common_app_leaverequest_changelist' %}">Manage Leave Requests</a>
+            <a href="{% url 'admin:common_app_leaverequest_add' %}">Add New Leave Request</a>
+            {# Changed from leaverequeust_changelist to leaverequeusts_changelist #}
+            <a href="{% url 'admin:index' %}">Go to Django Admin Interface</a> {# Link to default admin homepage #}
+        </div>
+
+        <div class="card">
+            <h2>Recent Activity</h2>
+            <h3>Recently Registered Users</h3>
+            <ul>
+                {% for user in recent_users %}
+                    <li>{{ user.username }} ({{ user.date_joined|date:"M d, Y" }})</li>
+                {% empty %}
+                    <li>No recent users.</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Recently Added Projects</h3>
+            <ul>
+                {% for project in recent_projects %}
+                    <li>{{ project.project_name }} (Client: {{ project.client.client_name|default:"N/A" }})</li>
+                {% empty %}
+                    <li>No recent projects.</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Latest Leave Requests</h3>
+            <ul>
+                {% for lr in latest_leave_requests %}
+                    <li>{{ lr.employee.user.username }} - {{ lr.leave_type }} (Status: {{ lr.status }})</li>
+                {% empty %}
+                    <li>No recent leave requests.</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Recently Updated Tasks</h3>
+            <ul>
+                {% for task in recent_tasks %}
+                    <li>{{ task.task_name }} (Project: {{ task.project.project_name|default:"N/A" }}, Due: {{ task.due_date|date:"M d, Y" }})</li>
+                {% empty %}
+                    <li>No recent tasks.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>

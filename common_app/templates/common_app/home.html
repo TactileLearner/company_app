@@ -1,0 +1,111 @@
+<!-- 
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Company App</title>
+   
+</head>
+<body>
+    <h1>Welcome to My Company App!</h1>
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <p><a href="{% url 'common_app:dashboard_redirect' %}">Go to your Dashboard</a></p>
+        <form action="{% url 'common_app:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'common_app:login' %}">Login</a> or Register (not yet implemented)</p>
+    {% endif %}
+    <img src="{% static 'test.jpg' %}" alt="Test Image" width="100"> </body>
+</body>
+</html> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Company App</title>
+    <link rel="stylesheet" href="{% static 'common_app/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-image: url('{% static 'background.jpg' %}'); /* Adjust if your image is in common_app/static/common_app/ */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center; /* Ensures text inside body is centered */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centers content vertically */
+            align-items: center;     /* Centers content horizontally */
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            z-index: 1; /* Place overlay behind content */
+        }
+        .content {
+            position: relative; /* To be above the overlay */
+            z-index: 2; /* Ensure content is above the overlay */
+            /* Remove any background or padding that might create a box */
+            background: none; /* Explicitly remove any background */
+            padding: 20px; /* Optional: adjust padding around the content if desired */
+            border-radius: 0; /* Optional: remove any border-radius */
+            box-shadow: none; /* Optional: remove any box-shadow */
+            display: flex; /* Use flexbox for content to center items within it */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%; /* Allow content to take full width */
+            max-width: 800px; /* Optional: limit content width if it stretches too wide */
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .login-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px; /* Add some space above the button */
+        }
+        .login-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Welcome to My Company App!</h1>
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}!</p>
+            <p><a href="{% url 'common_app:dashboard_redirect' %}" class="login-button">Go to your Dashboard</a></p>
+            <form action="{% url 'common_app:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="login-button">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'common_app:login' %}" class="login-button">Login</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager - Project List</title>
+</head>
+<body>
+    <h1>{{ message }}</h1>
+    <h2>All Projects</h2>
+    <ul>
+        {% for project in projects %}
+            <li>{{ project.name }} - Status: {{ project.status }} (Manager: {{ project.manager.full_name|default:"N/A" }})</li>
+        {% empty %}
+            <li>No projects found.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'manager_app:dashboard' %}">Back to Dashboard</a></p>
+    <form action="{% url 'common_app:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

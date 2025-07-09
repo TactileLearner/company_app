@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized Access</title>
+</head>
+<body>
+    <h1>Unauthorized Access!</h1>
+    <p>{{ message }}</p>
+    <p><a href="{% url 'common_app:home' %}">Go back to Home</a></p>
+    {% if not user.is_authenticated %}
+        <p><a href="{% url 'common_app:login' %}">Login</a></p>
+    {% endif %}
+</body>
+</html>

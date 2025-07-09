@@ -1,0 +1,12 @@
+{% extends 'common_app/base_dashboard.html' %}
+
+{% block title %}User Dashboard{% endblock %} {# Sets the title for this specific page #}
+{% block header_title %}User Dashboard{% endblock %} {# Sets the header title on the page #}
+
+{% block content %}
+    <h1>Welcome to Your Dashboard, {{ user.username }}!</h1>
+    <p>{{ message }}</p>
+    <p>This is a generic dashboard for all authenticated users.</p>
+    <p>You can use the sidebar to navigate to other accessible sections.</p>
+    {# Removed explicit Home/Login/Logout links as they are now in base_dashboard.html sidebar or header #}
+{% endblock %}

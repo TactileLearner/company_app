@@ -1,0 +1,11 @@
+{% extends 'common_app/base_dashboard.html' %}
+
+{% block title %}Staff Dashboard{% endblock %} {# Sets the title for this specific page #}
+{% block header_title %}Staff Dashboard{% endblock %} {# Sets the header title on the page #}
+
+{% block content %}
+    <h1>Welcome to the Staff Dashboard, {{ user.username }}!</h1>
+    <p>{{ message }}</p>
+    <p>This section is for general staff members.</p>
+    {# Removed explicit Logout link as it's now in base_dashboard.html header/sidebar #}
+{% endblock %}

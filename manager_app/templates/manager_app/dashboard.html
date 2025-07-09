@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+</head>
+<body>
+    <h1>{{ message }}</h1>
+    <p>This is the main dashboard for the Manager application.</p>
+    <ul>
+        <li><a href="{% url 'manager_app:employee_list' %}">View Employees</a></li>
+        <li><a href="{% url 'manager_app:project_list' %}">View Projects</a></li>
+        <li><a href="{% url 'manager_app:task_list' %}">View Tasks</a></li>
+        <li><a href="{% url 'admin:index' %}">Go to Django Admin Interface</a></li>
+    </ul>
+    <form action="{% url 'common_app:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
