@@ -1,29 +1,3 @@
-<!-- 
-{% load static %} 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Company App</title>
-   
-</head>
-<body>
-    <h1>Welcome to My Company App!</h1>
-    {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}!</p>
-        <p><a href="{% url 'common_app:dashboard_redirect' %}">Go to your Dashboard</a></p>
-        <form action="{% url 'common_app:logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'common_app:login' %}">Login</a> or Register (not yet implemented)</p>
-    {% endif %}
-    <img src="{% static 'test.jpg' %}" alt="Test Image" width="100"> </body>
-</body>
-</html> -->
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">

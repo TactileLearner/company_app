@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,25 +6,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        /* Basic styling for readability - you'll likely replace this with a proper CSS framework */
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
-        .dashboard-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .card h2 { margin-top: 0; color: #0056b3; }
-        .card ul { list-style: none; padding: 0; }
-        .card ul li { margin-bottom: 5px; }
-        .quick-links a { display: block; margin-bottom: 10px; padding: 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; text-align: center; }
-        .quick-links a:hover { background-color: #0056b3; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px;}
-        .metric-item { background-color: #e9ecef; padding: 15px; border-radius: 5px; text-align: center; }
-        .metric-item strong { display: block; font-size: 2em; color: #28a745; }
-        .metric-item span { font-size: 0.9em; color: #6c757d; }
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0; /* Remove default body margin */
+            padding: 20px; /* Add padding around the entire content */
+            background-color: #f4f4f4; /* Light background as seen in your image */
+            color: #333;
+        }
+
+        /* Top Header Section */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .top-header h1 {
+            color: #333; /* Darker color for main title */
+            margin: 0; /* Remove default h1 margin */
+            font-size: 2em; /* Adjust font size as needed */
+        }
+        .top-header .user-info {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+        }
+        .top-header .user-info span {
+            margin-right: 10px;
+            color: #555;
+        }
+        .top-header .user-info form {
+            display: inline; /* Keep form elements on the same line */
+        }
+        .top-header .user-info button {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: underline;
+            padding: 0; /* Remove default button padding */
+        }
+        .top-header .user-info button:hover {
+            color: #0056b3;
+        }
+
+        /* Messages Styling (e.g., "Welcome, admin!") */
+        .messages {
+            list-style: none;
+            padding: 10px 15px;
+            margin: 0 0 20px 0; /* Top/Bottom margin, no left/right */
+            border-radius: 5px;
+            background-color: #d4edda; /* Green background for success messages */
+            color: #155724; /* Dark green text */
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+        }
+        .messages li {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main Dashboard Content Grid */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+            gap: 20px; /* Space between cards */
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #0056b3; /* Blue heading for card titles */
+            margin-bottom: 15px;
+        }
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .card ul li {
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        /* Quick Links Card Specifics */
+        .quick-links a {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #007bff; /* Blue button background */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .quick-links a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Metrics Grid Specifics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 2 columns for metrics on wider screens */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .metric-item {
+            background-color: #e9ecef; /* Light grey background for metric boxes */
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Subtle inner shadow */
+        }
+        .metric-item strong {
+            display: block;
+            font-size: 2em;
+            color: #28a745; /* Green for numbers */
+            margin-bottom: 5px;
+        }
+        .metric-item span {
+            font-size: 0.9em;
+            color: #6c757d; /* Darker grey for labels */
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Admin Dashboard, {{ request.user.username }}!</h1>
+    <div class="top-header">
+        <h1>Welcome to the Admin Dashboard, {{ request.user.username }}!</h1>
+        <div class="user-info">
+            {# The "Welcome, admin!" text is part of the main h1 now #}
+            {# The logout button is implemented securely as a form #}
+            <form action="{% url 'common_app:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
 
-    <p><a href="{% url 'common_app:logout' %}">Logout</a></p>
+    {# Display messages (like the green "Welcome, admin!" box) #}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <div class="dashboard-container">
 
@@ -50,7 +186,6 @@
             <a href="{% url 'admin:common_app_project_changelist' %}">Manage Projects</a>
             <a href="{% url 'admin:common_app_leaverequest_changelist' %}">Manage Leave Requests</a>
             <a href="{% url 'admin:common_app_leaverequest_add' %}">Add New Leave Request</a>
-            {# Changed from leaverequeust_changelist to leaverequeusts_changelist #}
             <a href="{% url 'admin:index' %}">Go to Django Admin Interface</a> {# Link to default admin homepage #}
         </div>
 
