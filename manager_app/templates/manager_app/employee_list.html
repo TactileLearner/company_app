@@ -1,25 +1,166 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manager - Employee List</title>
+    <title>Employee List</title>
+    <!-- Tailwind CSS CDN - This would be loaded in your actual base_dashboard.html -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Inter font and other minor adjustments from base_dashboard.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #374151; /* text-gray-800 */
+        }
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            margin-top: 0.5rem;
+            width: 12rem; /* w-48 */
+            background-color: #fff;
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding-top: 0.25rem; /* py-1 */
+            padding-bottom: 0.25rem; /* py-1 */
+            --tw-ring-color: rgba(0, 0, 0, 0.05);
+            --tw-ring-opacity: 1;
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        .dropdown-item {
+            display: block;
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            font-size: 0.875rem; /* text-sm */
+            color: #4b5563; /* text-gray-700 */
+            transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-duration: 150ms;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dropdown-item:hover {
+            background-color: #f3f4f6; /* hover:bg-gray-100 */
+        }
+    </style>
 </head>
-<body>
-    <h1>{{ message }}</h1>
-    <h2>Your Team Members</h2>
-    <ul>
-        {% for employee in employees %}
-            <li>{{ employee.full_name }} ({{ employee.job_title }} - {{ employee.department }})</li>
-        {% empty %}
-            <li>No employees found.</li>
-        {% endfor %}
-    </ul>
-    <p><a href="{% url 'manager_app:dashboard' %}">Back to Dashboard</a></p>
-    <form action="{% url 'common_app:logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header (from base_dashboard.html) -->
+    <header class="bg-white shadow-md p-4 flex justify-between items-center z-10">
+        <div class="text-2xl font-bold text-blue-600">My Company App Dashboard</div>
+        <div class="relative">
+            <!-- Assuming user is authenticated for this view -->
+            <button id="userMenuButton" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 focus:outline-none">
+                <span class="font-medium">Welcome, new_manager!</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div id="userMenu" class="dropdown-menu hidden">
+                <a href="/common/dashboard/" class="dropdown-item">My Main Dashboard</a>
+                <a href="/manager/dashboard/" class="dropdown-item">Manager Dashboard</a>
+                <form action="/common/logout/" method="post" class="dropdown-item">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="dummy_csrf_token">
+                    <button type="submit" class="w-full text-left">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area with Sidebar (from base_dashboard.html) -->
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 text-white p-4 flex-shrink-0 hidden md:block">
+            <nav>
+                <ul>
+                    <li class="mb-2">
+                        <a href="/common/dashboard/" class="block py-2 px-4 rounded hover:bg-gray-700">My Main Dashboard</a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="/manager/dashboard/" class="block py-2 px-4 rounded hover:bg-gray-700">Manager Dashboard</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Page Content (from employee_list.html) -->
+        <main class="flex-1 p-6">
+            <!-- Messages block (from base_dashboard.html) -->
+            <!-- Assuming no messages for this output -->
+
+            <!-- Content from employee_list.html starts here -->
+            <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
+                <h1 class="text-4xl font-extrabold text-gray-900 mb-6 text-center">Employee Directory</h1>
+
+                <div class="bg-white p-6 rounded-lg shadow-md mb-8 text-center">
+                    <p class="text-xl text-gray-700">Total Employees: <span class="font-semibold text-blue-600">2</span></p>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-xl overflow-hidden border border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-blue-600 text-white">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider rounded-tl-lg">Username</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Job Title</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Department</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider rounded-tr-lg">Phone Number</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-100">
+                                <!-- Sample Employee Data -->
+                                <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">employee1</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Python Developer</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">IT</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">123-456-7890</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">employee2</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">HR Specialist</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Human Resources</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">987-654-3210</td>
+                                </tr>
+                                <!-- End Sample Employee Data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center">
+                    <a href="/manager/dashboard/" class="inline-flex items-center px-8 py-4 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                        <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Back to Dashboard
+                    </a>
+                </div>
+
+            </div>
+            <!-- Content from employee_list.html ends here -->
+        </main>
+    </div>
+
+    <!-- Footer (from base_dashboard.html) -->
+    <footer class="bg-gray-800 text-white p-4 text-center mt-auto">
+        <p>&copy; 2025 My Company App. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for dropdown menu functionality (from base_dashboard.html)
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+
+        if (userMenuButton && userMenu) {
+            userMenuButton.addEventListener('click', () => {
+                userMenu.classList.toggle('hidden');
+            });
+
+            window.addEventListener('click', (event) => {
+                if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

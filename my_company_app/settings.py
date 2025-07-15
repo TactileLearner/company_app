@@ -3,6 +3,7 @@ Django settings for my_company_app project.
 """
 
 from pathlib import Path
+import os
 
 # Base directory for the project.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,8 +50,15 @@ ROOT_URLCONF = 'my_company_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [
+            os.path.join(BASE_DIR, 'common_app', 'templates'), # For common_app templates like base_dashboard.html, login.html, home.html
+            os.path.join(BASE_DIR, 'admin_app', 'templates'),  # For admin_app templates
+            os.path.join(BASE_DIR, 'manager_app', 'templates'),# <--- ADD THIS LINE FOR MANAGER APP
+            os.path.join(BASE_DIR, 'hr_app', 'templates'),     # For HR app templates
+            os.path.join(BASE_DIR, 'employee_app', 'templates'),# For Employee app templates
+            os.path.join(BASE_DIR, 'client_app', 'templates'),
+        ],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

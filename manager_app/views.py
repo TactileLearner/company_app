@@ -20,8 +20,12 @@ def employee_list_view(request):
     # Managers can see employees in their department or under them
     # For simplicity, let's list all employees for now.
     # Later, we can filter based on the manager's department or direct reports.
-    employees = Employee.objects.all().order_by('full_name')
-    return render(request, 'manager_app/employee_list.html', {'employees': employees, 'message': 'Manage Team Members'})
+    employees = Employee.objects.all().order_by('user__username')
+    context = {
+        'employees': employees,
+        'message': 'List of all Employees'
+    }
+    return render(request, 'manager_app/employee_list.html', context)
 
 @login_required
 @user_passes_test(is_manager, login_url='common_app:login')
